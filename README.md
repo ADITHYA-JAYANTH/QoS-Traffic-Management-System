@@ -51,6 +51,9 @@ In `qos` mode the HIGH class should show near-zero loss while LOW absorbs most o
 in `fifo` mode the loss is spread across classes. Results are saved in `results/`.
 
 ## Team contributions
-| <Adithya> | TCP/UDP socket implementation and measurement | sockets/ |
-| <Amudan> | SDN controller and QoS policy | controller/ |
-| <Advaith> | Mininet topology, queue setup, integration and testing, scripts | topology/, setup.sh, run.sh, docs/ |
+
+| Member | Part | Files |
+|---|---|---|
+| <Name 1> | TCP/UDP socket implementation and measurement | `sockets/` |
+| <Name 2> | SDN controller and QoS policy | `controller/` |
+| <Name 3> | Mininet topology, queue setup, integration and testing, scripts | `topology/`, `setup.sh`, `run.sh`, `docs/` |
