@@ -54,6 +54,6 @@ in `fifo` mode the loss is spread across classes. Results are saved in `results/
 
 | Member | Part | Files |
 |---|---|---|
-| <Name 1> | TCP/UDP socket implementation and measurement | `sockets/` |
-| <Name 2> | SDN controller and QoS policy | `controller/` |
-| <Name 3> | Mininet topology, queue setup, integration and testing, scripts | `topology/`, `setup.sh`, `run.sh`, `docs/` |
+| Adithya Jayanth | TCP/UDP socket implementation and measurement | `sockets/` |
+| Amudan Desikan | SDN controller and QoS policy | `controller/` |
+| Advaith Krishnan | Mininet topology, queue setup, integration and testing, scripts | `topology/`, `setup.sh`, `run.sh`, `docs/` |
