@@ -1,0 +1,63 @@
+
+######## scenario=steady mode=adaptive tag=steady_adaptive_load0.5 ########
+
+=== Connectivity ===
+
+=== TCP socket test (h1 -> h4) ===
+[TCP client] reply: ACK: hello-from-h1
+
+=== UDP traffic running (steady) ... ===
+[UDP sender] port 5001: sent 1243 packets, send errors 0
+[UDP sender] port 5002: sent 2514 packets, send errors 0
+[UDP sender] port 5003: sent 3751 packets, send errors 0
+
+=== Receiver results ===
+[UDP receiver] listening on ports [5001, 5002, 5003]
+class     port    sent      rx   loss%     kbps  delay_ms  jitter_ms
+HIGH      5001    1243    1243     0.0      249       3.1       0.84
+MEDIUM    5002    2514    2514     0.0      503       2.9       0.55
+LOW       5003    3751    3751     0.0      750       2.9       0.49
+total throughput 1502 kbps | Jain fairness (delivery ratio) 1.000 | malformed 0
+
+=== Controller status (REST) ===
+{
+  "mode": "adaptive",
+  "congested": false,
+  "load_kbps": 2,
+  "capacity_kbps": 2000,
+  "port_rx_kbps": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 2
+  },
+  "policy": {
+    "5001": {
+      "cls": "HIGH",
+      "queue": 0
+    },
+    "5002": {
+      "cls": "MEDIUM",
+      "queue": 0
+    },
+    "5003": {
+      "cls": "LOW",
+      "queue": 0
+    }
+  }
+}
+
+=== Flow table (QoS rules) ===
+ cookie=0x0, duration=28.135s, table=0, n_packets=1246, n_bytes=673871, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5001 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.136s, table=0, n_packets=2517, n_bytes=1362753, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5002 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.136s, table=0, n_packets=3754, n_bytes=2033207, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5003 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.136s, table=0, n_packets=44, n_bytes=3180, priority=0 actions=CONTROLLER:65535
+
+=== Queue stats on the bottleneck port ===
+OFPST_QUEUE reply (OF1.3) (xid=0x2): 4 queues
+  port 4 queue 0: bytes=4072381, pkts=7549, errors=0, duration=760454243.3710967296s
+  port 4 queue 1: bytes=0, pkts=0, errors=0, duration=760454243.3710967296s
+  port 4 queue 2: bytes=0, pkts=0, errors=0, duration=760454243.3710967296s
+  port 4 queue 3: bytes=0, pkts=0, errors=0, duration=760454243.3710967296s
+
+Saved /home/advaith/QoS-Traffic-Management-System/results/steady_adaptive_load0.5.json

@@ -1,0 +1,23 @@
+loading app controller/qos_controller.py
+loading app ryu.controller.ofp_handler
+creating context wsgi
+instantiating app controller/qos_controller.py of QoSController
+QoS controller started in ADAPTIVE mode
+instantiating app ryu.controller.ofp_handler of OFPHandler
+(21918) wsgi starting up on http://0.0.0.0:8080
+switch 1 connected, mode=adaptive
+  rule: udp/5001 (HIGH) -> queue 0
+  rule: udp/5002 (MEDIUM) -> queue 0
+  rule: udp/5003 (LOW) -> queue 0
+(21918) accepted ('127.0.0.1', 44044)
+127.0.0.1 - - [16/Nov/2026 09:32:30] "GET /qos/status HTTP/1.1" 200 486 0.002257
+CONGESTION DETECTED: load 3274 kbps (164% of link) -> priority queues ON
+  rule: udp/5001 (HIGH) -> queue 1
+  rule: udp/5002 (MEDIUM) -> queue 2
+  rule: udp/5003 (LOW) -> queue 3
+(21918) accepted ('127.0.0.1', 44498)
+127.0.0.1 - - [16/Nov/2026 09:32:56] "GET /qos/status HTTP/1.1" 200 485 0.005300
+CONGESTION CLEARED: load 0 kbps -> back to best effort (queue 0)
+  rule: udp/5001 (HIGH) -> queue 0
+  rule: udp/5002 (MEDIUM) -> queue 0
+  rule: udp/5003 (LOW) -> queue 0

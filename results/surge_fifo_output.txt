@@ -1,0 +1,63 @@
+
+######## scenario=surge mode=fifo tag=surge_fifo ########
+
+=== Connectivity ===
+
+=== TCP socket test (h1 -> h4) ===
+[TCP client] reply: ACK: hello-from-h1
+
+=== UDP traffic running (surge) ... ===
+[UDP sender] port 5001: sent 4992 packets, send errors 0
+[UDP sender] port 5002: sent 4955 packets, send errors 0
+[UDP sender] port 5003: sent 8696 packets, send errors 0
+
+=== Receiver results ===
+[UDP receiver] listening on ports [5001, 5002, 5003]
+class     port    sent      rx   loss%     kbps  delay_ms  jitter_ms
+HIGH      5001    4992    4352    12.8      435     752.7       2.70
+MEDIUM    5002    4955    4385    11.5      439     726.4       2.78
+LOW       5003    8696    5997    31.0      600    1561.4       2.34
+total throughput 1474 kbps | Jain fairness (delivery ratio) 0.988 | malformed 0
+
+=== Controller status (REST) ===
+{
+  "mode": "fifo",
+  "congested": false,
+  "load_kbps": 3,
+  "capacity_kbps": 2000,
+  "port_rx_kbps": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 2
+  },
+  "policy": {
+    "5001": {
+      "cls": "HIGH",
+      "queue": 0
+    },
+    "5002": {
+      "cls": "MEDIUM",
+      "queue": 0
+    },
+    "5003": {
+      "cls": "LOW",
+      "queue": 0
+    }
+  }
+}
+
+=== Flow table (QoS rules) ===
+ cookie=0x0, duration=48.178s, table=0, n_packets=4924, n_bytes=2667347, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5001 actions=set_queue:0,output:4
+ cookie=0x0, duration=48.178s, table=0, n_packets=4958, n_bytes=2685775, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5002 actions=set_queue:0,output:4
+ cookie=0x0, duration=48.178s, table=0, n_packets=7679, n_bytes=4160557, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5003 actions=set_queue:0,output:4
+ cookie=0x0, duration=48.178s, table=0, n_packets=54, n_bytes=3712, priority=0 actions=CONTROLLER:65535
+
+=== Queue stats on the bottleneck port ===
+OFPST_QUEUE reply (OF1.3) (xid=0x2): 4 queues
+  port 4 queue 0: bytes=7989596, pkts=14788, errors=2825, duration=760454384.4074967296s
+  port 4 queue 1: bytes=0, pkts=0, errors=0, duration=760454384.4074967296s
+  port 4 queue 2: bytes=0, pkts=0, errors=0, duration=760454384.4074967296s
+  port 4 queue 3: bytes=0, pkts=0, errors=0, duration=760454384.4074967296s
+
+Saved /home/advaith/QoS-Traffic-Management-System/results/surge_fifo.json

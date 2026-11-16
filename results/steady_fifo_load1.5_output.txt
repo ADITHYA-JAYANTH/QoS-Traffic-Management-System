@@ -1,0 +1,63 @@
+
+######## scenario=steady mode=fifo tag=steady_fifo_load1.5 ########
+
+=== Connectivity ===
+
+=== TCP socket test (h1 -> h4) ===
+[TCP client] reply: ACK: hello-from-h1
+
+=== UDP traffic running (steady) ... ===
+[UDP sender] port 5001: sent 3756 packets, send errors 0
+[UDP sender] port 5002: sent 7479 packets, send errors 0
+[UDP sender] port 5003: sent 11259 packets, send errors 0
+
+=== Receiver results ===
+[UDP receiver] listening on ports [5001, 5002, 5003]
+class     port    sent      rx   loss%     kbps  delay_ms  jitter_ms
+HIGH      5001    3756    1377    63.3      247    2053.7       4.01
+MEDIUM    5002    7479    3198    57.2      573    2084.4       2.35
+LOW       5003   11259    5199    53.8      932    2105.8       1.82
+total throughput 1752 kbps | Jain fairness (delivery ratio) 0.991 | malformed 0
+
+=== Controller status (REST) ===
+{
+  "mode": "fifo",
+  "congested": false,
+  "load_kbps": 3,
+  "capacity_kbps": 2000,
+  "port_rx_kbps": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 0
+  },
+  "policy": {
+    "5001": {
+      "cls": "HIGH",
+      "queue": 0
+    },
+    "5002": {
+      "cls": "MEDIUM",
+      "queue": 0
+    },
+    "5003": {
+      "cls": "LOW",
+      "queue": 0
+    }
+  }
+}
+
+=== Flow table (QoS rules) ===
+ cookie=0x0, duration=28.298s, table=0, n_packets=3759, n_bytes=2035917, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5001 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.298s, table=0, n_packets=7482, n_bytes=4053783, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5002 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.298s, table=0, n_packets=11262, n_bytes=6102543, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5003 actions=set_queue:0,output:4
+ cookie=0x0, duration=28.298s, table=0, n_packets=46, n_bytes=3292, priority=0 actions=CONTROLLER:65535
+
+=== Queue stats on the bottleneck port ===
+OFPST_QUEUE reply (OF1.3) (xid=0x2): 4 queues
+  port 4 queue 0: bytes=5300335, pkts=9813, errors=12730, duration=760454090.3969967296s
+  port 4 queue 1: bytes=0, pkts=0, errors=0, duration=760454090.3969967296s
+  port 4 queue 2: bytes=0, pkts=0, errors=0, duration=760454090.3969967296s
+  port 4 queue 3: bytes=0, pkts=0, errors=0, duration=760454090.3969967296s
+
+Saved /home/advaith/QoS-Traffic-Management-System/results/steady_fifo_load1.5.json

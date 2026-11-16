@@ -1,0 +1,64 @@
+
+######## scenario=policy mode=adaptive tag=policy_adaptive ########
+
+=== Connectivity ===
+
+=== TCP socket test (h1 -> h4) ===
+[TCP client] reply: ACK: hello-from-h1
+
+=== UDP traffic running (policy) ... ===
+[t=15s] REST: promote udp/5003 to HIGH, demote udp/5001 to LOW
+[UDP sender] port 5001: sent 8042 packets, send errors 0
+[UDP sender] port 5002: sent 4003 packets, send errors 0
+[UDP sender] port 5003: sent 7984 packets, send errors 0
+
+=== Receiver results ===
+[UDP receiver] listening on ports [5001, 5002, 5003]
+class     port    sent      rx   loss%     kbps  delay_ms  jitter_ms
+HIGH      5001    8042    6583    18.1      619    3606.0       5.17
+MEDIUM    5002    4003    4003     0.0      400      14.1       4.07
+LOW       5003    7984    7984     0.0      798    1023.2     734.38
+total throughput 1818 kbps | Jain fairness (delivery ratio) 0.992 | malformed 0
+
+=== Controller status (REST) ===
+{
+  "mode": "adaptive",
+  "congested": false,
+  "load_kbps": 1,
+  "capacity_kbps": 2000,
+  "port_rx_kbps": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0
+  },
+  "policy": {
+    "5001": {
+      "cls": "LOW",
+      "queue": 0
+    },
+    "5002": {
+      "cls": "MEDIUM",
+      "queue": 0
+    },
+    "5003": {
+      "cls": "HIGH",
+      "queue": 0
+    }
+  }
+}
+
+=== Flow table (QoS rules) ===
+ cookie=0x0, duration=0.125s, table=0, n_packets=8045, n_bytes=4358929, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5001 actions=set_queue:0,output:4
+ cookie=0x0, duration=0.125s, table=0, n_packets=4006, n_bytes=2169791, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5002 actions=set_queue:0,output:4
+ cookie=0x0, duration=0.125s, table=0, n_packets=7987, n_bytes=4327493, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5003 actions=set_queue:0,output:4
+ cookie=0x0, duration=48.592s, table=0, n_packets=49, n_bytes=3550, priority=0 actions=CONTROLLER:65535
+
+=== Queue stats on the bottleneck port ===
+OFPST_QUEUE reply (OF1.3) (xid=0x2): 4 queues
+  port 4 queue 0: bytes=365338, pkts=705, errors=0, duration=760454561.4220967296s
+  port 4 queue 1: bytes=4193077, pkts=7739, errors=0, duration=760454561.4220967296s
+  port 4 queue 2: bytes=2099873, pkts=3877, errors=0, duration=760454561.4220967296s
+  port 4 queue 3: bytes=3409887, pkts=6294, errors=1459, duration=760454561.4220967296s
+
+Saved /home/advaith/QoS-Traffic-Management-System/results/policy_adaptive.json

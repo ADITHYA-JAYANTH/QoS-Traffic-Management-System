@@ -1,0 +1,63 @@
+
+######## scenario=steady mode=static tag=steady_static_load0.5 ########
+
+=== Connectivity ===
+
+=== TCP socket test (h1 -> h4) ===
+[TCP client] reply: ACK: hello-from-h1
+
+=== UDP traffic running (steady) ... ===
+[UDP sender] port 5001: sent 1266 packets, send errors 0
+[UDP sender] port 5002: sent 2514 packets, send errors 0
+[UDP sender] port 5003: sent 3782 packets, send errors 0
+
+=== Receiver results ===
+[UDP receiver] listening on ports [5001, 5002, 5003]
+class     port    sent      rx   loss%     kbps  delay_ms  jitter_ms
+HIGH      5001    1266    1266     0.0      253       0.6       0.36
+MEDIUM    5002    2514    2514     0.0      503       0.6       0.38
+LOW       5003    3782    3782     0.0      756       1.2       0.42
+total throughput 1513 kbps | Jain fairness (delivery ratio) 1.000 | malformed 0
+
+=== Controller status (REST) ===
+{
+  "mode": "static",
+  "congested": false,
+  "load_kbps": 3,
+  "capacity_kbps": 2000,
+  "port_rx_kbps": {
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 2
+  },
+  "policy": {
+    "5001": {
+      "cls": "HIGH",
+      "queue": 1
+    },
+    "5002": {
+      "cls": "MEDIUM",
+      "queue": 2
+    },
+    "5003": {
+      "cls": "LOW",
+      "queue": 3
+    }
+  }
+}
+
+=== Flow table (QoS rules) ===
+ cookie=0x0, duration=27.892s, table=0, n_packets=1268, n_bytes=686282, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5001 actions=set_queue:1,output:4
+ cookie=0x0, duration=27.892s, table=0, n_packets=2516, n_bytes=1362698, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5002 actions=set_queue:2,output:4
+ cookie=0x0, duration=27.892s, table=0, n_packets=3784, n_bytes=2049954, priority=100,udp,nw_dst=10.0.0.4,tp_dst=5003 actions=set_queue:3,output:4
+ cookie=0x0, duration=27.892s, table=0, n_packets=43, n_bytes=3098, priority=0 actions=CONTROLLER:65535
+
+=== Queue stats on the bottleneck port ===
+OFPST_QUEUE reply (OF1.3) (xid=0x2): 4 queues
+  port 4 queue 0: bytes=2662, pkts=34, errors=0, duration=760454127.3791967296s
+  port 4 queue 1: bytes=686337, pkts=1269, errors=0, duration=760454127.3791967296s
+  port 4 queue 2: bytes=1362753, pkts=2517, errors=0, duration=760454127.3791967296s
+  port 4 queue 3: bytes=2050009, pkts=3785, errors=0, duration=760454127.3791967296s
+
+Saved /home/advaith/QoS-Traffic-Management-System/results/steady_static_load0.5.json

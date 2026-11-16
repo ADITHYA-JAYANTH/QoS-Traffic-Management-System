@@ -1,0 +1,15 @@
+loading app controller/qos_controller.py
+loading app ryu.controller.ofp_handler
+creating context wsgi
+instantiating app controller/qos_controller.py of QoSController
+QoS controller started in ADAPTIVE mode
+instantiating app ryu.controller.ofp_handler of OFPHandler
+(21679) wsgi starting up on http://0.0.0.0:8080
+switch 1 connected, mode=adaptive
+  rule: udp/5001 (HIGH) -> queue 0
+  rule: udp/5002 (MEDIUM) -> queue 0
+  rule: udp/5003 (LOW) -> queue 0
+(21679) accepted ('127.0.0.1', 48086)
+127.0.0.1 - - [16/Nov/2026 09:31:52] "GET /qos/status HTTP/1.1" 200 486 0.001329
+(21679) accepted ('127.0.0.1', 39432)
+127.0.0.1 - - [16/Nov/2026 09:32:17] "GET /qos/status HTTP/1.1" 200 486 0.001719
