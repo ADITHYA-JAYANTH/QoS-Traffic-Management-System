@@ -5,7 +5,7 @@ if [ "$EUID" -eq 0 ]; then echo "Run as a normal user: bash setup.sh"; exit 1; f
 
 echo "=== Installing system packages ==="
 sudo apt update
-sudo apt install -y mininet openvswitch-switch python3-pip python3-venv iperf net-tools
+sudo apt install -y mininet openvswitch-switch python3-pip python3-venv python3-matplotlib curl iperf net-tools
 sudo systemctl enable --now openvswitch-switch || sudo service openvswitch-switch start
 
 # Ryu needs old Python (3.9) + eventlet 0.30.2; newer system Pythons break it.
